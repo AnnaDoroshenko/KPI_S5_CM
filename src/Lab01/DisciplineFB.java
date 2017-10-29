@@ -9,7 +9,6 @@ public class DisciplineFB {
     private final double LAMBDA;
     private final double MU;
     private final double QUANTA;
-    private int TASKS_TO_SIMULATE;
     private Task taskOnProcessor = null;
     private final int amountQueues = 3;
     private final double INFINITY = Double.POSITIVE_INFINITY;
@@ -26,16 +25,17 @@ public class DisciplineFB {
         for (int i = 0; i < amountQueues; i++){
             queues.add(new LinkedList<>());
         }
+
+        finishedTasks = new ArrayList<>();
     }
 
     public List<Task> simulateDisciplineFB(int tasksToSimulate){
-        TASKS_TO_SIMULATE = tasksToSimulate;
         double T;
         double t1 = 0.0;
         double t2 = INFINITY;
         int alreadySimulatedTasks = 0;
 
-        while(alreadySimulatedTasks < TASKS_TO_SIMULATE){
+        while(alreadySimulatedTasks < tasksToSimulate){
             T = findMin(t1, t2);
 
             if(isT1Min(t1, t2)){
@@ -45,46 +45,42 @@ public class DisciplineFB {
                 alreadySimulatedTasks++;
 
                 if(isProcessorBusy()){
-                    queues.get(currentTaskPriority).add(task);
+                    queues.get(0).add(task);
                 } else{
                     task.setArrivingOnProcessorTime(T);
                     taskOnProcessor = task;
 
                     double processingTime = findMin(T, QUANTA);
-                    t2 = T + processingTime;
+
+                    t2 = T + ((currentTaskPriority == amountQueues - 1) ? taskOnProcessor.getSolutionLeftTime() : processingTime);
                 }
                 t1 = T + generateSolutionTime(LAMBDA);
             } else {
-                for (int i = 0; i < amountQueues; i++) {
-                    boolean isTaskFinished = taskOnProcessor.processingOfTask(QUANTA);
+                boolean isTaskFinished = (currentTaskPriority == amountQueues - 1) ? taskOnProcessor.finish() : taskOnProcessor.processingOfTask(QUANTA);
 
-                    if (isTaskFinished) {
-                        taskOnProcessor.setFinishTime(T);
-                        finishedTasks.add(taskOnProcessor);
-                    } else {
-                        queues.get(++currentTaskPriority).add(taskOnProcessor);
-                    }
+                if (isTaskFinished) {
+                    taskOnProcessor.setFinishTime(T);
+                    finishedTasks.add(taskOnProcessor);
+                } else {
+                    queues.get(currentTaskPriority + 1).add(taskOnProcessor);
                 }
-            }
 
-            taskOnProcessor = getTaskFromQueueAndSetPriority();
+                taskOnProcessor = getTaskFromQueueAndSetPriority();
 
-            if (taskOnProcessor == null){
-                t2 = INFINITY;
-            } else {
-                taskOnProcessor.setArrivingOnProcessorTime(T);
+                if (taskOnProcessor == null) {
+                    t2 = INFINITY;
+                } else {
+                    taskOnProcessor.setArrivingOnProcessorTime(T);
 
-                double timeOnProcessor = findMin(taskOnProcessor.getSolutionLeftTime(), QUANTA);
-                t2 = T + timeOnProcessor;
+                    double timeOnProcessor = findMin(taskOnProcessor.getSolutionLeftTime(), QUANTA);
+
+                    t2 = T + ((currentTaskPriority == amountQueues - 1) ? taskOnProcessor.getSolutionLeftTime() : timeOnProcessor);
+                }
             }
         }
 
         return finishedTasks;
     }
-
-//    int getQueuePriority(LinkedList<Task> queue){
-//        return Arrays.asList(queues).indexOf(queue);
-//    }
 
     private Task getTaskFromQueueAndSetPriority(){
         Task taskFromQueue = null;
