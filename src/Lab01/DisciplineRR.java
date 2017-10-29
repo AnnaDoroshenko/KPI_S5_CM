@@ -9,7 +9,7 @@ public class DisciplineRR extends Discipline {
     private final double QUANTA;
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
-    private LinkedList<Task> queue;
+    private LinkedList<Task> queue = new LinkedList<>();
 
     public DisciplineRR(double lambda, double mu, double quanta) {
         super(lambda, mu);
