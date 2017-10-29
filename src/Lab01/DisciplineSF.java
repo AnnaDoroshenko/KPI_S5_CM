@@ -5,15 +5,12 @@ import java.util.List;
 
 public class DisciplineSF extends Discipline {
 
-    private final double QUANTA;
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
     private List<Task> queue = new ArrayList<>();
 
-    public DisciplineSF(double lambda, double mu, double quanta) {
+    public DisciplineSF(double lambda, double mu) {
         super(lambda, mu);
-
-        QUANTA = quanta;
 
         finishedTasks = new ArrayList<>();
     }
@@ -39,20 +36,12 @@ public class DisciplineSF extends Discipline {
                     task.setArrivingOnProcessorTime(T);
                     taskOnProcessor = task;
 
-                    final double processingTime = findMin(T, QUANTA);
-
-                    t2 = T + processingTime;
+                    t2 = T + taskOnProcessor.getSolutionTime();
                 }
                 t1 = T + generateSolutionTime(LAMBDA);
             } else {
-                final boolean isTaskFinished = taskOnProcessor.processingOfTask(QUANTA);
-
-                if (isTaskFinished) {
-                    taskOnProcessor.setFinishTime(T);
-                    finishedTasks.add(taskOnProcessor);
-                } else {
-                    queue.add(taskOnProcessor);
-                }
+                taskOnProcessor.setFinishTime(T);
+                finishedTasks.add(taskOnProcessor);
 
                 taskOnProcessor = getTaskFromQueue();
 
@@ -61,8 +50,7 @@ public class DisciplineSF extends Discipline {
                 } else {
                     taskOnProcessor.setArrivingOnProcessorTime(T);
 
-                    final double timeOnProcessor = findMin(taskOnProcessor.getSolutionLeftTime(), QUANTA);
-                    t2 = T + timeOnProcessor;
+                    t2 = T + taskOnProcessor.getSolutionTime();
                 }
             }
         }

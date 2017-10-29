@@ -9,7 +9,7 @@ public class Lab01 {
         final double LAMBDA = 1.0;
         final double MU = 1.4;
         final double QUANTA = 1.0;
-        final int TASK_TO_SIMULATE = 1000;
+        final int TASK_TO_SIMULATE = 20000;
 
         {
             double averageTimeInSystem = 0.0;

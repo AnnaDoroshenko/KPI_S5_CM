@@ -40,7 +40,7 @@ public class DisciplineRR extends Discipline {
                     task.setArrivingOnProcessorTime(T);
                     taskOnProcessor = task;
 
-                    final double processingTime = findMin(T, QUANTA);
+                    final double processingTime = findMin(taskOnProcessor.getSolutionTime(), QUANTA);
 
                     t2 = T + processingTime;
                 }
