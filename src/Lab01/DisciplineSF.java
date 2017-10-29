@@ -1,17 +1,16 @@
 package Lab01;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-public class DisciplineRR extends Discipline {
+public class DisciplineSF extends Discipline {
 
     private final double QUANTA;
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
-    private LinkedList<Task> queue = new LinkedList<>();
+    private List<Task> queue = new ArrayList<>();
 
-    public DisciplineRR(double lambda, double mu, double quanta) {
+    public DisciplineSF(double lambda, double mu, double quanta) {
         super(lambda, mu);
 
         QUANTA = quanta;
@@ -19,7 +18,7 @@ public class DisciplineRR extends Discipline {
         finishedTasks = new ArrayList<>();
     }
 
-    public List<Task> simulateDisciplineRR(int tasksToSimulate) {
+    public List<Task> simulateDisciplineSF(int tasksToSimulate) {
         double T;
         double t1 = 0.0;
         double t2 = INFINITY;
@@ -75,9 +74,22 @@ public class DisciplineRR extends Discipline {
         Task taskFromQueue = null;
 
         if (queue.size() > 0) {
-            taskFromQueue = queue.removeFirst();
+            int index = 0;
+            int indexOfTheSmallest = 0;
+            double currentTheSmallest = queue.get(0).getSolutionTime();
+            for (Task task : queue) {
+                double currentTaskSolutionTime = task.getSolutionTime();
+                if (currentTaskSolutionTime < currentTheSmallest) {
+                    currentTheSmallest = currentTaskSolutionTime;
+                    indexOfTheSmallest = index;
+                }
+                index++;
+            }
+            taskFromQueue = queue.get(indexOfTheSmallest);
+            queue.remove(indexOfTheSmallest);
         }
 
         return taskFromQueue;
     }
 }
+

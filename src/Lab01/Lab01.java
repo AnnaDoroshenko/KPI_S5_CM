@@ -16,6 +16,7 @@ public class Lab01 {
             double dispersionOfTimeInSystem = 0.0;
             double averageSystemResponseTime = 0.0;
             double totalAssessmentOfRelevance = 0.0;
+            double totalAmountOfProcessedTasks;
 
             DisciplineFB disciplineFB = new DisciplineFB(LAMBDA, MU, QUANTA);
             List<Task> finishedTasks = disciplineFB.simulateDisciplineFB(TASK_TO_SIMULATE);
@@ -24,13 +25,64 @@ public class Lab01 {
             dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
             averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
             totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
+            totalAmountOfProcessedTasks = finishedTasks.size();
 
-            System.out.println("Average time in system = " + averageTimeInSystem +
+            System.out.println("FB: " + "\nAverage time in system = " + averageTimeInSystem +
             "\nDispersion of time in system = " + dispersionOfTimeInSystem +
             "\nAverage system response time = " + averageSystemResponseTime +
             "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance);
 
-            System.out.println(findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4));
+            System.out.println("\nTotal amount of processed tasks = " + totalAmountOfProcessedTasks);
+
+            System.out.println("\nBest parameter = " +
+                    findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4));
+
+            System.out.println("-------------------------------------------");
+        }
+
+        {
+            double averageTimeInSystem = 0.0;
+            double dispersionOfTimeInSystem = 0.0;
+            double averageSystemResponseTime = 0.0;
+            double totalAssessmentOfRelevance = 0.0;
+
+            DisciplineRR disciplineRR = new DisciplineRR(LAMBDA, MU, QUANTA);
+            List<Task> finishedTasks = disciplineRR.simulateDisciplineRR(TASK_TO_SIMULATE);
+
+            averageTimeInSystem += getAverageTimeInSystem(finishedTasks);
+            dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
+            averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
+            totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
+
+            System.out.println("RR: " + "\nAverage time in system = " + averageTimeInSystem +
+                    "\nDispersion of time in system = " + dispersionOfTimeInSystem +
+                    "\nAverage system response time = " + averageSystemResponseTime +
+                    "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance);
+
+            System.out.println("\nBest parameter = " +
+                    findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4));
+
+            System.out.println("-------------------------------------------");
+        }
+
+        {
+            double averageTimeInSystem = 0.0;
+            double dispersionOfTimeInSystem = 0.0;
+            double averageSystemResponseTime = 0.0;
+            double totalAssessmentOfRelevance = 0.0;
+
+            DisciplineSF disciplineSF = new DisciplineSF(LAMBDA, MU, QUANTA);
+            List<Task> finishedTasks = disciplineSF.simulateDisciplineSF(TASK_TO_SIMULATE);
+
+            averageTimeInSystem += getAverageTimeInSystem(finishedTasks);
+            dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
+            averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
+            totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
+
+            System.out.println("SF: " + "\nAverage time in system = " + averageTimeInSystem +
+                    "\nDispersion of time in system = " + dispersionOfTimeInSystem +
+                    "\nAverage system response time = " + averageSystemResponseTime +
+                    "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance);
         }
     }
 
@@ -78,7 +130,7 @@ public class Lab01 {
                           int coeff1, int coeff2, int coeff3, int coeff5){
         final double QUANTA_STEP = 0.1;
         final double LOWER_BOUND = 0.1;
-        final double HIGHER_BOUND = 0.1;
+        final double HIGHER_BOUND = 2.0;
         List<Double> statistics = new ArrayList<>();
 
         for(double quanta = LOWER_BOUND; quanta <= HIGHER_BOUND; quanta += QUANTA_STEP){
@@ -101,7 +153,7 @@ public class Lab01 {
 
         double currentMax = statistics.get(0);
         int indexOfMax = 0;
-        for (int i = 1; i < statistics.size(); i++){
+        for (int i = 0; i < statistics.size(); i++){
             if(statistics.get(i) > currentMax){
                 currentMax = statistics.get(i);
                 indexOfMax = i;
