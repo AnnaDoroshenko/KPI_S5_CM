@@ -71,7 +71,7 @@ public class Lab01 {
             double averageSystemResponseTime = 0.0;
             double totalAssessmentOfRelevance = 0.0;
 
-            DisciplineSF disciplineSF = new DisciplineSF(LAMBDA, MU, QUANTA);
+            DisciplineSF disciplineSF = new DisciplineSF(LAMBDA, MU);
             List<Task> finishedTasks = disciplineSF.simulateDisciplineSF(TASK_TO_SIMULATE);
 
             averageTimeInSystem += getAverageTimeInSystem(finishedTasks);
