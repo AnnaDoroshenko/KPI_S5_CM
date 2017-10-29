@@ -9,7 +9,7 @@ public class Lab01 {
         final double LAMBDA = 1.0;
         final double MU = 1.4;
         final double QUANTA = 1.0;
-        final int TASK_TO_SIMULATE = 20000;
+        final int TASK_TO_SIMULATE = 1000;
 
         {
             double averageTimeInSystem = 0.0;
@@ -25,14 +25,15 @@ public class Lab01 {
             dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
             averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
             totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
-            totalAmountOfProcessedTasks = finishedTasks.size();
+            totalAmountOfProcessedTasks = (double) finishedTasks.size() / TASK_TO_SIMULATE;
 
             System.out.println("FB: " + "\nAverage time in system = " + averageTimeInSystem +
             "\nDispersion of time in system = " + dispersionOfTimeInSystem +
             "\nAverage system response time = " + averageSystemResponseTime +
             "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance);
 
-            System.out.println("\nTotal amount of processed tasks = " + totalAmountOfProcessedTasks);
+            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
+                    + totalAmountOfProcessedTasks);
 
             System.out.println("\nBest parameter = " +
                     findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4));
@@ -45,6 +46,7 @@ public class Lab01 {
             double dispersionOfTimeInSystem = 0.0;
             double averageSystemResponseTime = 0.0;
             double totalAssessmentOfRelevance = 0.0;
+            double totalAmountOfProcessedTasks;
 
             DisciplineRR disciplineRR = new DisciplineRR(LAMBDA, MU, QUANTA);
             List<Task> finishedTasks = disciplineRR.simulateDisciplineRR(TASK_TO_SIMULATE);
@@ -53,11 +55,15 @@ public class Lab01 {
             dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
             averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
             totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
+            totalAmountOfProcessedTasks = (double) finishedTasks.size() / TASK_TO_SIMULATE;
 
             System.out.println("RR: " + "\nAverage time in system = " + averageTimeInSystem +
                     "\nDispersion of time in system = " + dispersionOfTimeInSystem +
                     "\nAverage system response time = " + averageSystemResponseTime +
                     "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance);
+
+            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
+                    + totalAmountOfProcessedTasks);
 
             System.out.println("\nBest parameter = " +
                     findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4));
@@ -70,6 +76,7 @@ public class Lab01 {
             double dispersionOfTimeInSystem = 0.0;
             double averageSystemResponseTime = 0.0;
             double totalAssessmentOfRelevance = 0.0;
+            double totalAmountOfProcessedTasks;
 
             DisciplineSF disciplineSF = new DisciplineSF(LAMBDA, MU);
             List<Task> finishedTasks = disciplineSF.simulateDisciplineSF(TASK_TO_SIMULATE);
@@ -78,15 +85,19 @@ public class Lab01 {
             dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
             averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
             totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
+            totalAmountOfProcessedTasks = (double) finishedTasks.size() / TASK_TO_SIMULATE;
 
             System.out.println("SF: " + "\nAverage time in system = " + averageTimeInSystem +
                     "\nDispersion of time in system = " + dispersionOfTimeInSystem +
                     "\nAverage system response time = " + averageSystemResponseTime +
                     "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance);
+
+            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
+                    + totalAmountOfProcessedTasks);
         }
     }
 
-    static double getAverageTimeInSystem(List<Task> tasks) {
+    private static double getAverageTimeInSystem(List<Task> tasks) {
         double totalTimeInSystem = 0.0;
         for (Task task : tasks) {
             totalTimeInSystem += task.getTimeInSystem();
@@ -95,7 +106,7 @@ public class Lab01 {
         return totalTimeInSystem / tasks.size();
     }
 
-    static double getDispersionOfTimeInSystem(List<Task> tasks, double averageTime) {
+    private static double getDispersionOfTimeInSystem(List<Task> tasks, double averageTime) {
         double sum = 0.0;
         for (Task task : tasks) {
             final double time = task.getTimeInSystem() - averageTime;
@@ -105,7 +116,7 @@ public class Lab01 {
         return sum / (tasks.size() - 1);
     }
 
-    static double getAverageSystemResponseTime(List<Task> tasks){
+    private static double getAverageSystemResponseTime(List<Task> tasks){
         double totalTimeInSystem = 0.0;
         for (Task task : tasks){
             totalTimeInSystem += task.getSystemResponseTime();
@@ -114,7 +125,7 @@ public class Lab01 {
         return totalTimeInSystem / tasks.size();
     }
 
-    static double getTotalAssessmentOfRelevance(List<Task> tasks){
+    private static double getTotalAssessmentOfRelevance(List<Task> tasks){
         double totalAssessmentOfRelevance = 0.0;
         for (Task task : tasks){
             final double currentRelevance = task.getRelevanceOfTask();
@@ -126,7 +137,7 @@ public class Lab01 {
         return totalAssessmentOfRelevance / tasks.size();
     }
 
-    static double findBestQuanta(double lambda, double mu, int tasksToSimulate,
+    private static double findBestQuanta(double lambda, double mu, int tasksToSimulate,
                           int coeff1, int coeff2, int coeff3, int coeff5){
         final double QUANTA_STEP = 0.1;
         final double LOWER_BOUND = 0.1;
@@ -160,8 +171,6 @@ public class Lab01 {
             }
         }
 
-        final double BEST_QUANTA = LOWER_BOUND + QUANTA_STEP * indexOfMax;
-
-        return BEST_QUANTA;
+        return LOWER_BOUND + QUANTA_STEP * indexOfMax;
     }
 }
