@@ -7,6 +7,9 @@ public class Task {
     private double arrivingOnProcessorTime;
     private double solutionTime;
     private double solutionLeftTime;
+    private double relevance;
+    private double relevanceHigh = 3;
+    private double relevanceLow = 4;
 
     public Task(double startTime, double solutionTime){
         this.startTime = startTime;
@@ -46,13 +49,23 @@ public class Task {
         arrivingOnProcessorTime = time;
     }
 
-    public double getTimeInQueue(){
+    public double getSystemResponseTime(){
         return arrivingOnProcessorTime - startTime;
     }
 
-    public double getTimeinSystem(){
+    public double getTimeInSystem(){
         return finishTime - startTime;
     }
 
+    public double getRelevanceOfTask(){
+        if ((finishTime - startTime) < relevanceHigh){
+            relevance = 1.0;
+        } else if (relevanceHigh < (finishTime - startTime) || (finishTime - startTime) < relevanceLow){
+            relevance = -(finishTime - startTime) + 3;
+        } else {
+            relevance = -1.0;
+        }
 
+        return relevance;
+    }
 }

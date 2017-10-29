@@ -4,59 +4,56 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DisciplineFB {
+public class DisciplineFB extends Discipline{
 
-    private final double LAMBDA;
-    private final double MU;
     private final double QUANTA;
-    private Task taskOnProcessor = null;
     private final int amountQueues = 3;
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
     private List<LinkedList<Task>> queues = new ArrayList<>();
-    private List<Task> finishedTasks;
     private int currentTaskPriority = 0;
 
-    public DisciplineFB(double lambda, double mu, double quanta){
-        LAMBDA = lambda;
-        MU = mu;
+    public DisciplineFB(double lambda, double mu, double quanta) {
+        super(lambda, mu);
+
         QUANTA = quanta;
 
-        for (int i = 0; i < amountQueues; i++){
+        for (int i = 0; i < amountQueues; i++) {
             queues.add(new LinkedList<>());
         }
 
         finishedTasks = new ArrayList<>();
     }
 
-    public List<Task> simulateDisciplineFB(int tasksToSimulate){
+    public List<Task> simulateDisciplineFB(int tasksToSimulate) {
         double T;
         double t1 = 0.0;
         double t2 = INFINITY;
         int alreadySimulatedTasks = 0;
 
-        while(alreadySimulatedTasks < tasksToSimulate){
+        while (alreadySimulatedTasks < tasksToSimulate) {
             T = findMin(t1, t2);
 
-            if(isT1Min(t1, t2)){
-                double solutionTime = generateSolutionTime(MU);
+            if (isT1Min(t1, t2)) {
+                final double solutionTime = generateSolutionTime(MU);
 
                 Task task = new Task(T, solutionTime);
                 alreadySimulatedTasks++;
 
-                if(isProcessorBusy()){
+                if (isProcessorBusy()) {
                     queues.get(0).add(task);
-                } else{
+                } else {
                     task.setArrivingOnProcessorTime(T);
                     taskOnProcessor = task;
 
-                    double processingTime = findMin(T, QUANTA);
+                    final double processingTime = findMin(T, QUANTA);
 
-                    t2 = T + ((currentTaskPriority == amountQueues - 1) ? taskOnProcessor.getSolutionLeftTime() : processingTime);
+                    t2 = T + processingTime;
                 }
                 t1 = T + generateSolutionTime(LAMBDA);
             } else {
-                boolean isTaskFinished = (currentTaskPriority == amountQueues - 1) ? taskOnProcessor.finish() : taskOnProcessor.processingOfTask(QUANTA);
+                final boolean isTaskFinished = (currentTaskPriority == amountQueues - 1) ?
+                        taskOnProcessor.finish() : taskOnProcessor.processingOfTask(QUANTA);
 
                 if (isTaskFinished) {
                     taskOnProcessor.setFinishTime(T);
@@ -72,9 +69,9 @@ public class DisciplineFB {
                 } else {
                     taskOnProcessor.setArrivingOnProcessorTime(T);
 
-                    double timeOnProcessor = findMin(taskOnProcessor.getSolutionLeftTime(), QUANTA);
-
-                    t2 = T + ((currentTaskPriority == amountQueues - 1) ? taskOnProcessor.getSolutionLeftTime() : timeOnProcessor);
+                    t2 = T + ((currentTaskPriority == amountQueues - 1) ?
+                            taskOnProcessor.getSolutionLeftTime() :
+                            findMin(taskOnProcessor.getSolutionLeftTime(), QUANTA));
                 }
             }
         }
@@ -82,11 +79,11 @@ public class DisciplineFB {
         return finishedTasks;
     }
 
-    private Task getTaskFromQueueAndSetPriority(){
+    private Task getTaskFromQueueAndSetPriority() {
         Task taskFromQueue = null;
 
-        for (int i = 0; i < amountQueues; i++){
-            if(queues.get(i).size() > 0){
+        for (int i = 0; i < amountQueues; i++) {
+            if (queues.get(i).size() > 0) {
                 taskFromQueue = queues.get(i).removeFirst();
                 currentTaskPriority = i;
                 break;
@@ -94,21 +91,5 @@ public class DisciplineFB {
         }
 
         return taskFromQueue;
-    }
-
-    double findMin(double t1, double t2){
-        return t1 < t2 ? t1 : t2;
-    }
-
-    boolean isT1Min(double t1, double t2){
-        return t1 < t2;
-    }
-
-    double generateSolutionTime(double intensity){
-        return (-1.0 / intensity * Math.log(Math.random()));
-    }
-
-    boolean isProcessorBusy(){
-        return taskOnProcessor != null;
     }
 }
