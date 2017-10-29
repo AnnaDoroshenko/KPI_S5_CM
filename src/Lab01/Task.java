@@ -32,7 +32,7 @@ public class Task {
         return false;
     }
 
-    void finishedTask(double finishTime){
+    void finish(double finishTime){
         solutionLeftTime = 0.0;
         this.finishTime = finishTime;
     }

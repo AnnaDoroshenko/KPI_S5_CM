@@ -1,6 +1,6 @@
 package Lab01;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class DisciplineFB {
     private final int amountQueues = 3;
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
-    private LinkedList<Task>[] queues = new LinkedList[amountQueues];
+    private List<LinkedList<Task>> queues = new ArrayList<>();
     private List<Task> finishedTasks;
     private int currentTaskPriority = 0;
 
@@ -22,6 +22,10 @@ public class DisciplineFB {
         LAMBDA = lambda;
         MU = mu;
         QUANTA = quanta;
+
+        for (int i = 0; i < amountQueues; i++){
+            queues.add(new LinkedList<>());
+        }
     }
 
     public List<Task> simulateDisciplineFB(int tasksToSimulate){
@@ -41,7 +45,7 @@ public class DisciplineFB {
                 alreadySimulatedTasks++;
 
                 if(isProcessorBusy()){
-                    queues[currentTaskPriority].add(task);
+                    queues.get(currentTaskPriority).add(task);
                 } else{
                     task.setArrivingOnProcessorTime(T);
                     taskOnProcessor = task;
@@ -58,12 +62,12 @@ public class DisciplineFB {
                         taskOnProcessor.setFinishTime(T);
                         finishedTasks.add(taskOnProcessor);
                     } else {
-                        queues[++currentTaskPriority].add(taskOnProcessor);
+                        queues.get(++currentTaskPriority).add(taskOnProcessor);
                     }
                 }
             }
 
-            taskOnProcessor = getTaskFromQueue();
+            taskOnProcessor = getTaskFromQueueAndSetPriority();
 
             if (taskOnProcessor == null){
                 t2 = INFINITY;
@@ -82,12 +86,14 @@ public class DisciplineFB {
 //        return Arrays.asList(queues).indexOf(queue);
 //    }
 
-    private Task getTaskFromQueue(){
+    private Task getTaskFromQueueAndSetPriority(){
         Task taskFromQueue = null;
 
         for (int i = 0; i < amountQueues; i++){
-            if(queues[i].size() > 0){
-                taskFromQueue = queues[i].removeFirst();
+            if(queues.get(i).size() > 0){
+                taskFromQueue = queues.get(i).removeFirst();
+                currentTaskPriority = i;
+                break;
             }
         }
 
