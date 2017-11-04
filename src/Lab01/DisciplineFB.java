@@ -8,24 +8,21 @@ public class DisciplineFB extends Discipline{
 
     private final double QUANTA;
     private final int amountQueues = 3;
-    private final double INFINITY = Double.POSITIVE_INFINITY;
 
     private List<LinkedList<Task>> queues = new ArrayList<>();
     private int currentTaskPriority = 0;
 
     public DisciplineFB(double lambda, double mu, double quanta) {
         super(lambda, mu);
-
         QUANTA = quanta;
 
         for (int i = 0; i < amountQueues; i++) {
             queues.add(new LinkedList<>());
         }
-
-        finishedTasks = new ArrayList<>();
     }
 
     public List<Task> simulateDisciplineFB(int tasksToSimulate) {
+        final double INFINITY = Double.POSITIVE_INFINITY;
         double T;
         double t1 = 0.0;
         double t2 = INFINITY;
@@ -43,7 +40,7 @@ public class DisciplineFB extends Discipline{
                 if (isProcessorBusy()) {
                     queues.get(0).add(task);
                 } else {
-                    task.setArrivingOnProcessorTime(T);
+                    task.setSystemResponseTime(T);
                     taskOnProcessor = task;
 
                     final double processingTime = findMin(taskOnProcessor.getSolutionTime(), QUANTA);
@@ -67,7 +64,7 @@ public class DisciplineFB extends Discipline{
                 if (taskOnProcessor == null) {
                     t2 = INFINITY;
                 } else {
-                    taskOnProcessor.setArrivingOnProcessorTime(T);
+                    taskOnProcessor.setSystemResponseTime(T);
 
                     t2 = T + ((currentTaskPriority == amountQueues - 1) ?
                             taskOnProcessor.getSolutionLeftTime() :

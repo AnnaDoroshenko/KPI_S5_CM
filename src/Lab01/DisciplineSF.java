@@ -5,17 +5,14 @@ import java.util.List;
 
 public class DisciplineSF extends Discipline {
 
-    private final double INFINITY = Double.POSITIVE_INFINITY;
-
     private List<Task> queue = new ArrayList<>();
 
     public DisciplineSF(double lambda, double mu) {
         super(lambda, mu);
-
-        finishedTasks = new ArrayList<>();
     }
 
     public List<Task> simulateDisciplineSF(int tasksToSimulate) {
+        final double INFINITY = Double.POSITIVE_INFINITY;
         double T;
         double t1 = 0.0;
         double t2 = INFINITY;
@@ -33,7 +30,7 @@ public class DisciplineSF extends Discipline {
                 if (isProcessorBusy()) {
                     queue.add(task);
                 } else {
-                    task.setArrivingOnProcessorTime(T);
+                    task.setSystemResponseTime(T);
                     taskOnProcessor = task;
 
                     t2 = T + taskOnProcessor.getSolutionTime();
@@ -48,9 +45,9 @@ public class DisciplineSF extends Discipline {
                 if (taskOnProcessor == null) {
                     t2 = INFINITY;
                 } else {
-                    taskOnProcessor.setArrivingOnProcessorTime(T);
+                    taskOnProcessor.setSystemResponseTime(T);
 
-                    t2 = T + taskOnProcessor.getSolutionTime();
+                    t2 = T + taskOnProcessor.getSolutionLeftTime();
                 }
             }
         }

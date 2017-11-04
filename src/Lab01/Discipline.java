@@ -1,5 +1,6 @@
 package Lab01;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Discipline {
@@ -12,6 +13,7 @@ public class Discipline {
     public Discipline(double lambda, double mu){
         LAMBDA = lambda;
         MU = mu;
+        finishedTasks = new ArrayList<>();
         taskOnProcessor = null;
     }
 
@@ -24,7 +26,7 @@ public class Discipline {
     }
 
     double generateSolutionTime(double intensity) {
-        return (-1.0 / intensity * Math.log(Math.random()));
+        return ((-1.0 / intensity) * Math.log(Math.random()));
     }
 
     boolean isProcessorBusy() {
