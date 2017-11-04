@@ -47,7 +47,7 @@ public class DisciplineSF extends Discipline {
                 } else {
                     taskOnProcessor.setSystemResponseTime(T);
 
-                    t2 = T + taskOnProcessor.getSolutionLeftTime();
+                    t2 = T + taskOnProcessor.getSolutionTime();
                 }
             }
         }
