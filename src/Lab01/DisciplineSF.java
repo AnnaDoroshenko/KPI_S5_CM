@@ -23,12 +23,21 @@ public class DisciplineSF extends Discipline {
 
             if (isT1Min(t1, t2)) {
                 final double solutionTime = generateSolutionTime(MU);
+                final double leftTime = t2 - T;
 
                 Task task = new Task(T, solutionTime);
                 alreadySimulatedTasks++;
 
                 if (isProcessorBusy()) {
-                    queue.add(task);
+                    if (task.getSolutionTime() < leftTime){
+                        taskOnProcessor.processingOfTask(taskOnProcessor.getSolutionLeftTime() - leftTime);
+                        queue.add(taskOnProcessor);
+                        task.setSystemResponseTime(T);
+                        taskOnProcessor = task;
+                        t2 = T + taskOnProcessor.getSolutionTime();
+                    } else {
+                        queue.add(task);
+                    }
                 } else {
                     task.setSystemResponseTime(T);
                     taskOnProcessor = task;
@@ -47,7 +56,7 @@ public class DisciplineSF extends Discipline {
                 } else {
                     taskOnProcessor.setSystemResponseTime(T);
 
-                    t2 = T + taskOnProcessor.getSolutionTime();
+                    t2 = T + taskOnProcessor.getSolutionLeftTime();
                 }
             }
         }
