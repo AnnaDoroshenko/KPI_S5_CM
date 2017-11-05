@@ -6,11 +6,11 @@ import java.util.List;
 public class Lab01 {
 
     public static void main(String[] args) {
-        final double LAMBDA = 0.3;
-        final double MU = 1.0;
+        final double LAMBDA = 1.2;
+        final double MU = 1.8;
         final double QUANTA = 0.01;
-        final int TASK_TO_SIMULATE = 1000;
-        final int AMOUNT_OF_REPETITIONS = 10;
+        final int TASK_TO_SIMULATE = 8000;
+        final int AMOUNT_OF_REPETITIONS = 30;
 
         {
             double averageTimeInSystem = 0.0;
@@ -24,7 +24,7 @@ public class Lab01 {
                 List<Task> finishedTasks = disciplineFB.simulateDisciplineFB(TASK_TO_SIMULATE);
 
                 averageTimeInSystem += getAverageTimeInSystem(finishedTasks);
-                dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
+                dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks);
                 averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
                 totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
 
@@ -36,11 +36,11 @@ public class Lab01 {
                     "\nAverage system response time = " + averageSystemResponseTime / AMOUNT_OF_REPETITIONS +
                     "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance / AMOUNT_OF_REPETITIONS);
 
-            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
-                    + totalAmountOfProcessedTasks / AMOUNT_OF_REPETITIONS);
+//            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
+//                    + totalAmountOfProcessedTasks / AMOUNT_OF_REPETITIONS);
 
-            System.out.println("\nBest parameter = " +
-                    findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4, AMOUNT_OF_REPETITIONS));
+//            System.out.println("\nBest parameter = " +
+//                    findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4, AMOUNT_OF_REPETITIONS));
 
             System.out.println("-------------------------------------------");
         }
@@ -57,7 +57,7 @@ public class Lab01 {
                 List<Task> finishedTasks = disciplineRR.simulateDisciplineRR(TASK_TO_SIMULATE);
 
                 averageTimeInSystem += getAverageTimeInSystem(finishedTasks);
-                dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
+                dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks);
                 averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
                 totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
 
@@ -69,11 +69,11 @@ public class Lab01 {
                     "\nAverage system response time = " + averageSystemResponseTime / AMOUNT_OF_REPETITIONS +
                     "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance / AMOUNT_OF_REPETITIONS);
 
-            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
-                    + totalAmountOfProcessedTasks / AMOUNT_OF_REPETITIONS);
-
-            System.out.println("\nBest parameter = " +
-                    findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4, AMOUNT_OF_REPETITIONS));
+//            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
+//                    + totalAmountOfProcessedTasks / AMOUNT_OF_REPETITIONS);
+//
+//            System.out.println("\nBest parameter = " +
+//                    findBestQuanta(LAMBDA, MU, TASK_TO_SIMULATE, -1, -6, -3, 4, AMOUNT_OF_REPETITIONS));
 
             System.out.println("-------------------------------------------");
         }
@@ -90,7 +90,7 @@ public class Lab01 {
                 List<Task> finishedTasks = disciplineSF.simulateDisciplineSF(TASK_TO_SIMULATE);
 
                 averageTimeInSystem += getAverageTimeInSystem(finishedTasks);
-                dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks, averageTimeInSystem);
+                dispersionOfTimeInSystem += getDispersionOfTimeInSystem(finishedTasks);
                 averageSystemResponseTime += getAverageSystemResponseTime(finishedTasks);
                 totalAssessmentOfRelevance += getTotalAssessmentOfRelevance(finishedTasks);
 
@@ -102,8 +102,8 @@ public class Lab01 {
                     "\nAverage system response time = " + averageSystemResponseTime / AMOUNT_OF_REPETITIONS +
                     "\nTotal assessment Of task relevance = " + totalAssessmentOfRelevance / AMOUNT_OF_REPETITIONS);
 
-            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
-                    + totalAmountOfProcessedTasks / AMOUNT_OF_REPETITIONS);
+//            System.out.println("\nRelation between amount of processed tasks and amount of tasks in system = "
+//                    + totalAmountOfProcessedTasks / AMOUNT_OF_REPETITIONS);
         }
     }
 
@@ -124,6 +124,10 @@ public class Lab01 {
         }
 
         return sum / (tasks.size() - 1);
+    }
+
+    private static double getDispersionOfTimeInSystem(List<Task> tasks){
+        return getDispersionOfTimeInSystem(tasks, getAverageTimeInSystem(tasks));
     }
 
     private static double getAverageSystemResponseTime(List<Task> tasks) {

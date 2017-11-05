@@ -61,11 +61,11 @@ public class DisciplineSF extends Discipline {
         if (queue.size() > 0) {
             int index = 0;
             int indexOfTheSmallest = 0;
-            double currentTheSmallest = queue.get(0).getSolutionTime();
+            double currentTheSmallestSolutionTime = queue.get(0).getSolutionTime();
             for (Task task : queue) {
                 double currentTaskSolutionTime = task.getSolutionTime();
-                if (currentTaskSolutionTime < currentTheSmallest) {
-                    currentTheSmallest = currentTaskSolutionTime;
+                if (currentTaskSolutionTime < currentTheSmallestSolutionTime) {
+                    currentTheSmallestSolutionTime = currentTaskSolutionTime;
                     indexOfTheSmallest = index;
                 }
                 index++;

@@ -42,6 +42,7 @@ public class DisciplineFB extends Discipline{
                 } else {
                     task.setSystemResponseTime(T);
                     taskOnProcessor = task;
+                    currentTaskPriority = 0;
 
                     final double processingTime = findMin(taskOnProcessor.getSolutionTime(), QUANTA);
 
