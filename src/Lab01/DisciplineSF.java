@@ -20,10 +20,11 @@ public class DisciplineSF extends Discipline {
 
         while (alreadySimulatedTasks < tasksToSimulate) {
             T = findMin(t1, t2);
+            final double leftTime = t2 - T;
 
             if (isT1Min(t1, t2)) {
                 final double solutionTime = generateSolutionTime(MU);
-                final double leftTime = t2 - T;
+
 
                 Task task = new Task(T, solutionTime);
                 alreadySimulatedTasks++;
@@ -70,9 +71,9 @@ public class DisciplineSF extends Discipline {
         if (queue.size() > 0) {
             int index = 0;
             int indexOfTheSmallest = 0;
-            double currentTheSmallestSolutionTime = queue.get(0).getSolutionTime();
+            double currentTheSmallestSolutionTime = queue.get(0).getSolutionLeftTime();
             for (Task task : queue) {
-                double currentTaskSolutionTime = task.getSolutionTime();
+                double currentTaskSolutionTime = task.getSolutionLeftTime();
                 if (currentTaskSolutionTime < currentTheSmallestSolutionTime) {
                     currentTheSmallestSolutionTime = currentTaskSolutionTime;
                     indexOfTheSmallest = index;
