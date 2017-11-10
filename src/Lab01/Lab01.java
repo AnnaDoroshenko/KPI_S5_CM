@@ -84,6 +84,7 @@ public class Lab01 {
             double averageSystemResponseTime = 0.0;
             double totalAssessmentOfRelevance = 0.0;
             double totalAmountOfProcessedTasks = 0;
+            int amount = 0;
 
             for (int i = 0; i < AMOUNT_OF_REPETITIONS; i++) {
                 DisciplineSF disciplineSF = new DisciplineSF(LAMBDA, MU);

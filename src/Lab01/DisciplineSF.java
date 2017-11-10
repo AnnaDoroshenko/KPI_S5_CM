@@ -6,6 +6,7 @@ import java.util.List;
 public class DisciplineSF extends Discipline {
 
     private List<Task> queue = new ArrayList<>();
+    private int amountOfTasks = 0;
 
     public DisciplineSF(double lambda, double mu) {
         super(lambda, mu);
@@ -20,25 +21,24 @@ public class DisciplineSF extends Discipline {
 
         while (alreadySimulatedTasks < tasksToSimulate) {
             T = findMin(t1, t2);
-            final double leftTime = t2 - T;
 
             if (isT1Min(t1, t2)) {
                 final double solutionTime = generateSolutionTime(MU);
-
+//                final double leftTime = t2 - T;
 
                 Task task = new Task(T, solutionTime);
                 alreadySimulatedTasks++;
 
                 if (isProcessorBusy()) {
-                    if (task.getSolutionTime() < leftTime){
-                        taskOnProcessor.processingOfTask(taskOnProcessor.getSolutionLeftTime() - leftTime);
-                        queue.add(taskOnProcessor);
-                        task.setSystemResponseTime(T);
-                        taskOnProcessor = task;
-                        t2 = T + taskOnProcessor.getSolutionTime();
-                    } else {
+//                    if (task.getSolutionTime() < leftTime){
+//                        taskOnProcessor.processingOfTask(taskOnProcessor.getSolutionLeftTime() - leftTime);
+//                        queue.add(taskOnProcessor);
+//                        task.setSystemResponseTime(T);
+//                        taskOnProcessor = task;
+//                        t2 = T + taskOnProcessor.getSolutionTime();
+//                    } else {
                         queue.add(task);
-                    }
+//                    }
                 } else {
                     task.setSystemResponseTime(T);
                     taskOnProcessor = task;
@@ -57,7 +57,7 @@ public class DisciplineSF extends Discipline {
                 } else {
                     taskOnProcessor.setSystemResponseTime(T);
 
-                    t2 = T + taskOnProcessor.getSolutionLeftTime();
+                    t2 = T + taskOnProcessor.getSolutionTime();
                 }
             }
         }
@@ -71,9 +71,9 @@ public class DisciplineSF extends Discipline {
         if (queue.size() > 0) {
             int index = 0;
             int indexOfTheSmallest = 0;
-            double currentTheSmallestSolutionTime = queue.get(0).getSolutionLeftTime();
+            double currentTheSmallestSolutionTime = queue.get(0).getSolutionTime();
             for (Task task : queue) {
-                double currentTaskSolutionTime = task.getSolutionLeftTime();
+                double currentTaskSolutionTime = task.getSolutionTime();
                 if (currentTaskSolutionTime < currentTheSmallestSolutionTime) {
                     currentTheSmallestSolutionTime = currentTaskSolutionTime;
                     indexOfTheSmallest = index;
